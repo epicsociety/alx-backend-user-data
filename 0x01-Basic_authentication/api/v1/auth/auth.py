@@ -7,17 +7,17 @@ from typing import List, TypeVar
 
 
 class Auth():
-    """ """
+    """ Handles user authentication """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ manage paths"""
+        """ Manage paths"""
         return False
     
 
     def authorization_header(self, request=None) -> str:
-        """ handles API authetication """
+        """ Handles API authetication """
         return None
     
     def current_user(self, request=None) -> TypeVar('User'):
-        """ flask request object """
+        """ Flask request object """
         return None
