@@ -24,9 +24,8 @@ class Auth:
         """ Handle API authetication """
         if request is None:
             return None
-        if 'Authorization' not in request.headers:
-            return None
-        return request.headers['Authorization']
+        header = request.headers.get('Authorization')
+        return header if header else None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Flask request object """

@@ -25,11 +25,11 @@ def before_request():
 
     if auth is None:
         return
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if auth.require_auth(request.path, excluded_paths):
+    allowed_paths = ['/api/v1/status/',
+                     '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    if auth.require_auth(request.path, allowed_paths):
         return
-    authorization_header = auth.authorization.header(request)
+    authorization_header = auth.authorization_header(request)
     if not authorization_header:
         abort(401)
     if not auth.current_user(request):
