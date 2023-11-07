@@ -23,6 +23,7 @@ else:
     auth = Auth()
 
 
+@app.before_request
 def before_request():
     """ filter each request """
 
@@ -32,10 +33,9 @@ def before_request():
                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
     if auth.require_auth(request.path, allowed_paths):
         return
-    authorization_header = auth.authorization_header(request)
-    if not authorization_header:
+    if auth.authorization_header(request) is None:
         abort(401)
-    if not auth.current_user(request):
+    if auth.current_user(request) is None:
         abort(403)
 
 
