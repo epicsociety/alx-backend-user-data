@@ -10,7 +10,8 @@ import base64
 class BasicAuth(Auth):
     """ Basic Authentication """
 
-    def extract_base64_authorization_header(self, authorization_header: str) -> str:  # noqa: E501
+    def extract_base64_authorization_header(
+            self, authorization_header: str) -> str:  # noqa: E501
         """ Return the Base64 part of header """
         if authorization_header is None:
             return None
@@ -21,7 +22,8 @@ class BasicAuth(Auth):
         token = authorization_header.split(" ")[-1]
         return token
 
-    def decode_base64_authorization_header(self, base64_authorization_header: str) -> str:  # noqa: E501
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str) -> str:  # noqa: E501
         """ Returns the decoded value of a Base64 string """
         if base64_authorization_header is None:
             return None
@@ -34,7 +36,9 @@ class BasicAuth(Auth):
         except Exception:
             return None
 
-    def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str):  # noqa: E501
+    def extract_user_credentials(
+            self, decoded_base64_authorization_header: str
+    ) -> (str, str):  # noqa: E501
         """returns user email and password from the Base64 decoded value """
         if decoded_base64_authorization_header is None:
             return (None, None)
@@ -44,6 +48,7 @@ class BasicAuth(Auth):
             result = decoded_base64_authorization_header.split(":", 1)
             return (result[0], result[1])
         return (None, None)
+
     def current_user(self, request=None) -> TypeVar('User'):
         """ get the current user"""
 
@@ -55,7 +60,8 @@ class BasicAuth(Auth):
                 if decoded is not None:
                     email, password = self.extract_user_credentials(decoded)
                     if email is not None:
-                        return self.user_object_from_credentials(email, password)
+                        return self.user_object_from_credentials(
+                            email, password)
         return
 
     def user_object_from_credentials(self, user_email: str,
