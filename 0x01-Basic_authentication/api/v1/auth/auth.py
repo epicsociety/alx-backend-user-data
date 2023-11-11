@@ -19,7 +19,7 @@ class Auth:
             if path.startswith(excluded_path.rstrip('/')):
                 if '*' in excluded_path:
                     prefix = excluded_path.rstrip('*').rstrip('/')
-                    if path == prefix or path.startswith(prefix):
+                    if path == prefix or path.startswith(prefix + '/'):
                         return False
                 else:
                     return False
