@@ -7,9 +7,7 @@ import uuid
 
 class SessionAuth(Auth):
     """A new authentication mechanism """
-    def __init__(self):
-        """ Create an empty dict"""
-        self.user_id_by_session_id = {}
+    user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
         """ create a Session ID for a user_id """
