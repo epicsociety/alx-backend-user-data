@@ -3,6 +3,7 @@
 Route module for the API
 """
 from os import getenv
+from pickle import NONE
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
@@ -32,17 +33,19 @@ def before_request():
     if auth is None:
         return
     allowed_paths = [
-        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/'
+        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/'
     ]
     if auth.require_auth(request.path, allowed_paths):
         authorization_header = auth.authorization_header(request)
-        if not authorization_header:
-            abort(401)
-        if not auth.current_user(request):
+        session_cookie = auth.session_cookie(request)
+        request.current_user = auth.current_user(request)
+        if auth.current_user(request) is None:
             abort(403)
-        else:
-            request.current_user = auth.current_user(request)
-    return
+        if request.current_user is None:
+            abort(403)
+        if authorization_header is None or session_cookie is None:
+            abort(401)        
 
 
 @app.errorhandler(404)
