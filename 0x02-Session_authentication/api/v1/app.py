@@ -39,13 +39,15 @@ def before_request():
     if auth.require_auth(request.path, allowed_paths):
         authorization_header = auth.authorization_header(request)
         session_cookie = auth.session_cookie(request)
-        if authorization_header is None or session_cookie is None:
-            abort(401)
         request.current_user = auth.current_user(request)
+        if authorization_header is None:
+            abort(401)
         if auth.current_user(request) is None:
             abort(403)
         if request.current_user is None:
             abort(403)
+        if session_cookie is None:
+            abort(401)        
 
 
 @app.errorhandler(404)
