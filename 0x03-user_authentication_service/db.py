@@ -57,3 +57,14 @@ class DB:
             return session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ Update user"""
+        user = self.find_user_by(id=user_id)
+        session = self._session
+        if kwargs and any(k in FIELDS for k in kwargs):
+            for key, value in kwargs.items():
+                setattr(user, key, value)
+            session.commit()
+        else:
+            raise ValueError
