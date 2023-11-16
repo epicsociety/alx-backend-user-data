@@ -3,6 +3,7 @@
 """
 from contextlib import redirect_stderr
 from turtle import TurtleGraphicsError
+from typing import Optional
 from urllib import response
 from auth import Auth
 from flask import Flask, jsonify, request, abort, redirect, url_for
@@ -79,14 +80,15 @@ def get_reset_password_token() -> tuple:
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
-def update_password() -> str:
+def update_password() -> Optional[tuple]:
     """ password update"""
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
     try:
         AUTH.update_password(reset_token, new_password)
-        return jsonify({"email": f"{email}", "message": "Password updated"}), 200
+        response_data = {"email": f"{email}", "message": "Password updated"}
+        return jsonify(response_data), 200
     except Exception:
         abort(403)
 
