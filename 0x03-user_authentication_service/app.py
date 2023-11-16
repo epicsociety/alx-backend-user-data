@@ -58,9 +58,7 @@ def logout() -> str:
 def profile() -> str:
     """ Find the user using the session_id"""
     session_id = request.cookies.get('session_id')
-    print(f"Session ID: {session_id}")
     user = AUTH.get_user_from_session_id(session_id)
-    print(f"User: {user}")
     if user:
         response = jsonify({"email": user.email})
         return response, 200
