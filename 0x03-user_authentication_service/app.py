@@ -73,12 +73,10 @@ def get_reset_password_token() -> tuple:
     """ generate a token """
     email = request.form.get("email")
     user = AUTH.create_session(email)
-    if user:
-        reset_token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": f"{email}",
-                        "reset_token": f"{reset_token}"}), 200
-    if Exception:
+    if user is None:
         abort(403)
+    reset_token = AUTH.get_reset_password_token(email)
+    return jsonify({"email": f"{email}", "reset_token": f"{reset_token}"}), 200
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
@@ -87,12 +85,11 @@ def update_password() -> Optional[tuple]:
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
-    user = AUTH.create_session(email)
-    if user:
+    try:
         AUTH.update_password(reset_token, new_password)
         response_data = {"email": f"{email}", "message": "Password updated"}
         return jsonify(response_data), 200
-    if Exception:
+    except Exception:
         abort(403)
 
 
