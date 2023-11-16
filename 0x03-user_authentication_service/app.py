@@ -2,6 +2,7 @@
 """Flask app
 """
 from contextlib import redirect_stderr
+from urllib import response
 from auth import Auth
 from flask import Flask, jsonify, request, abort, redirect, url_for
 
@@ -51,6 +52,16 @@ def logout() -> str:
         return redirect(url_for('welcome'))
     else:
         abort(403)
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile() -> str:
+    """ Find the user using the session_id"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        response = jsonify({"email": f"{user.email}"})
+        return response, 200
 
 
 if __name__ == "__main__":
