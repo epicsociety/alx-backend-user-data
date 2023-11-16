@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """Flask app
 """
-from calendar import JULY
-from os import abort
 from auth import Auth
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 
 AUTH = Auth()
 app = Flask(__name__)
@@ -30,14 +28,14 @@ def register() -> str:
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ Create a a new session for the user """
+    """ Create a new session for the user """
     email = request.form.get("email")
     password = request.form.get("password")
     if not AUTH.valid_login(email, password):
         abort(401)
     else:
         session_id = AUTH.create_session(email)
-        response = jsonify({"email": "<user email>", "message": "logged in"})
+        response = jsonify({"email": f"{email}", "message": "logged in"})
         response.set_cookie('session_id', session_id)
         return response
 
