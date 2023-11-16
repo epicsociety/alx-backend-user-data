@@ -79,7 +79,7 @@ def get_reset_password_token() -> tuple:
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
-def reset_password() -> tuple:
+def update_password() -> tuple:
     """ password update"""
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
